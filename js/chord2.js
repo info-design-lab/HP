@@ -5,6 +5,7 @@ queue()
     .await(makeRankVis);
 
 function makeRankVis(error, harry, ron, hermoini){
+
     if(error){
         console.log(error);
     }
@@ -116,6 +117,7 @@ function makeVis(current_movie){
       .append("g")
       .append("path")
         .attr("class", function(d,i){ return i; })
+        .attr("id", function(d,i){ return "segment"; })
         .style("fill", function(d,i){ return qcolors[i] })
         .style("opacity",0.7)
         .style("stroke", function(d,i){ return qcolors[i] })
@@ -124,24 +126,23 @@ function makeVis(current_movie){
           .outerRadius(320)
         )
       .on('mousemove', function (d) {
-            d3.selectAll("path")
-            .style("opacity", 0.2);            
+            d3.selectAll(".chord")
+            .style("opacity", 0.05);            
             d3.selectAll(document.getElementsByClassName(this.getAttribute("class")))
-              .style("opacity", 1); 
+              .style("opacity", 0.8);  
 
         })
           .on("mouseover", function() {
            // updateInfo(d, x, y);
-              d3.selectAll("path")
-              .style("opacity", 0.2); 
+              d3.selectAll(".chord")
+              .style("opacity", 0.05); 
               d3.selectAll(document.getElementsByClassName(this.getAttribute("class")))
-              .style("opacity", 1);
+              .style("opacity", 0.8); 
           })
           .on("mouseout", function(d) {
 
             d3.selectAll("path")
               .style("opacity", 0.7);
-            console.log(this.getAttribute("class"));
           });
         
     // Add the links between groups
@@ -155,21 +156,26 @@ function makeVis(current_movie){
         .attr("d", d3.ribbon()
           .radius(300)
         )        
-        .attr("class", function(d,i){ return d.source.index + " " +d.source.subindex; })
+        .attr("class", function(d,i){ return d.source.index + " " +d.source.subindex + " " + "chord"; })
         .style("fill", function(d){ return(colors[d.source.index]) }) // colors depend on the source group. Change to target otherwise.
         .style("opacity",0.7)
         .style("stroke", function(d){ return(colors[d.source.index]) })
         .on('mousemove', function (d) {
+            
             d3.selectAll("path")
-            .style("opacity", 0.3);
+            .style("opacity", 0.1);
+            d3.selectAll("#segment")
+            .style("opacity", 1);
             d3.select(this)
               .style("opacity", 1); 
 
         })
           .on("mouseover", function() {
            // updateInfo(d, x, y);
-              d3.selectAll("path")
-              .style("opacity", 0.3);
+            d3.selectAll("path")
+            .style("opacity", 0.1);
+            d3.selectAll("#segment")
+            .style("opacity", 1);
               d3.select(this)
               .style("opacity", 1);
           })
@@ -179,5 +185,4 @@ function makeVis(current_movie){
               .style("opacity", 0.7);
           });
         }
-
 }
