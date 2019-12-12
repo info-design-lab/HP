@@ -31,8 +31,18 @@ h1{
 
 td{
   width: 100px;
-  font-family: 'Roboto Slab Regular';
+  font-family: 'Roboto Condensed';
   color: #666666;
+}
+
+.node rect {
+  fill-opacity: .9;
+  shape-rendering: crispEdges;
+}
+
+.link {
+  fill: none;
+  stroke: #000;
 }
 
 .heading-description{
