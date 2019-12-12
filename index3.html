@@ -1,0 +1,257 @@
+<html>
+	<head>
+		<title>Harry Potter Dialogues</title>
+
+		<!--Scripts-->
+	   	<script src="scripts/d3.v4.js"></script>
+	    <script src="scripts/queue.js"></script>
+	    <script src="https://unpkg.com/d3-sankey@0"></script>
+	    <script src="js/sankey.js"></script>
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+	    <link href="css/main.css" rel="stylesheet">
+	</head>
+	<body>
+		<h1 align=center style="margin-bottom: 0px">Harry Potter Series: Who said What?</h1>
+  		<div align="left">
+  			<table align="center" border=1>
+			<div id="sankey_diagram"></div></table>
+		</div>
+
+		<div id="controls" style="text-align:center;font-family:ubuntu;font-size:100%;color:#444444;margin-top: 10px;margin-bottom: 10px;">
+		  <span>
+		  	<label style="margin-right: 10px;"><input id="allcharacters" type="radio" name="grouping" value="1" checked>All Characters</label>
+		    <label style="margin-right: 10px;"><input id="harry" type="radio" name="grouping" value="2">Harry Potter</label>
+		    <label style="margin-right: 10px;"><input id="ron" type="radio" name="grouping" value="3" >Ron Weasley</label>
+		    <label style="margin-right: 10px;"><input id="hermoine" type="radio" name="grouping" value="4" >Hermione Granger</label>
+		  </span>
+		</div>
+
+		<script src="js/chord.js">  </script>
+
+		<script>
+	
+		var full_data = [];
+		var bp;
+		var g;
+		var slider_value = 1;
+		var playing = 0;
+		var width = 1400;
+		var height = 650;
+		var sankey_dimension = {
+			width: 700,
+			height: 575
+		}
+
+		var svg = d3.select("#sankey_diagram").append("svg").attr("width", width).attr("height", height);
+
+		function isChecked(elementID) {
+	    	return d3.select(elementID).property("checked");
+	  	}
+	  	addFillListener();
+
+	  	//var opt = 1;
+	  	var file="sankey_agg.csv";
+
+
+
+	  	function addFillListener() {
+	    	d3.selectAll('input[name="grouping"]')
+		      .on("change", function() {
+		      	if(isChecked("#allcharacters"))
+		      		file="sankey_agg.csv";
+		      	else if(isChecked("#harry"))
+		      		file="harry_colour.csv";
+		      	else if(isChecked("#ron"))
+		      		file="ron_colour.csv";
+		      	else file="hermoine_colour.csv";
+
+		      full_data = [];
+
+		      d3.csv(file, function(data) {
+			    data.forEach(function(d) {
+			        full_data.push([d['source'], d['target'], d['value']])
+			    });
+
+			    svg.selectAll("groups").remove();
+			    svg.selectAll("foreignObject").remove();
+			    svg.selectAll(".edges").remove();
+			    svg.selectAll(".mainBars").remove();
+			    svg.selectAll(".subBars").remove();
+			    svg.selectAll(".chord").remove();
+			    svg.selectAll(".groups").remove();
+			    svg.selectAll(".label").remove();
+			    svg.selectAll(".face").remove();
+			    svg.selectAll(".majorTicks").remove();
+			    svg.selectAll(".minorTicks").remove();
+
+			    console.log(svg);
+
+			    draw(full_data);
+				});
+		      });		    
+	  	}
+
+		d3.csv(file, function(data) {
+		    data.forEach(function(d) {
+		        full_data.push([d['source'], d['target'], d['value']])
+		    });
+		    draw(full_data);
+		});
+
+
+
+function draw(data) {
+
+    var color = {
+
+    	//orange
+    	"m1": "#cc7722",
+        "m2": "#b3672b",
+        "m3": "#b1560f",
+        "m4": "#8b4000",
+        "m5": "#813f0b",
+        "m6": "#883000",
+        "m7": "#793802",
+        "m8": '#613613',
+
+        //blue
+        "m1_harry": "#1388be",
+        "m2_harry": "#0f52ba",
+        "m3_harry": "#1034a6",
+        "m4_harry": "#2832c2",
+        "m5_harry": "#000080",
+        "m6_harry": "#111e6c",
+        "m7_harry": "#1d2951",
+        "m8_harry": '#003152',
+
+        //green
+        "m1_ron": "#50c878",
+        "m2_ron": "#5dbb63",
+        "m3_ron": "#00a86b",
+        "m4_ron": "#028a0f",
+        "m5_ron": "#2e8857",
+        "m6_ron": "#4f7942",
+        "m7_ron": "#086623",
+        "m8_ron": '#026623',
+
+        //red
+        "m1_hermoine": "#d21f3c",
+        "m2_hermoine": "#c25863",
+        "m3_hermoine": "#b2292c",
+        "m4_hermoine": "#a24345",
+        "m5_hermoine": "#921f3c",
+        "m6_hermoine": "#953835",
+        "m7_hermoine": "#8c1208",
+        "m8_hermoine": '#7e191b'
+
+      /**  "m1_harry": "#7799cc",
+        "m2_harry": "#7799cc",
+        "m3_harry": "#7799cc",
+        "m4_harry": "#7799cc",
+        "m5_harry": "#7799cc",
+        "m6_harry": "#7799cc",
+        "m7_harry": "#7799cc",
+        "m8_harry": '#7799cc',
+        'all_harry': "#7799cc",
+        "m1_ron": "#FF6961",
+        "m2_ron": "#FF6961",
+        "m3_ron": "#FF6961",
+        "m4_ron": "#FF6961",
+        "m5_ron": "#FF6961",
+        "m6_ron": "#FF6961",
+        "m7_ron": "#FF6961",
+        "m8_ron": '#FF6961',
+        'all_ron': "#FF6961",
+        "m1_hermoine": "#efa355",
+        "m2_hermoine": "#efa355",
+        "m3_hermoine": "#efa355",
+        "m4_hermoine": "#efa355",
+        "m5_hermoine": "#efa355",
+        "m6_hermoine": "#efa355",
+        "m7_hermoine": "#efa355",
+        "m8_hermoine": '#efa355',
+        'all_hermoine': "#efa355",**/
+
+    };
+
+
+
+    svg.append("foreignObject")
+        .attr("width", 200)
+        .attr("height", 30)
+        .attr('x', width / 2 - 100)
+        .attr('y', 10)
+        .append("xhtml:body")
+        .style("font", "14px 'Roboto Condensed', 'Helvetica', 'Arial', sans-serif")
+        //.html('<h4>Total Deaths - <span id="year-number">2001</span></h4>')
+
+    bp = viz.bP()
+        .data(data)
+        .min(12)
+        .pad(1)
+        .height(sankey_dimension.height)
+        .width(sankey_dimension.width)
+        .barSize(35)
+        .fill(d => color[d.primary]);
+
+    g = svg.append("g").attr("transform", "translate(400,50)").call(bp);
+
+    g.append("text").attr("x", -100).attr("y", -8).style("text-anchor", "middle").text("Movie Parts").style("font-weight", 'normal').style('fill', '#808080').style("font", "'Roboto Condensed', 'Helvetica', 'Arial', sans-serif");
+
+    g.append("text").attr("x", sankey_dimension.width + 100).attr("y", -8).style("text-anchor", "middle").text("Dialogue Type").style("font-weight", 'normal').style('fill', '#808080').style("font", "'Roboto Condensed', 'Helvetica', 'Arial', sans-serif");
+
+    g.append("line").attr("x1", -100).attr("x2", 0);
+
+    g.append("line").attr("x1", sankey_dimension.width).attr("x2", sankey_dimension.width + 100);
+
+    g.append("line").attr("y1", 620).attr("y2", 620).attr("x1", -100).attr("x2", 0);
+
+    g.append("line").attr("y1", 620).attr("y2", 620).attr("x1", sankey_dimension.width).attr("x2", sankey_dimension.width + 100);
+
+    g.selectAll(".mainBars")
+        .on("mouseover", mouseover);
+
+    g.selectAll(".mainBars").append("text").attr("class", "label")
+        .attr("x", d => (d.part == "primary" ? -90 : 90))
+        .attr("y", d => +6)
+				.style('fill', function(d){
+					return '#6a6a6a'
+				}) // '#6a6a6a')
+        .text(function(d) {
+        	if(d.key=="nAnswer") return "'N'Answer";
+        	else if(d.key=="whQuestion") return "'Wh'Question";
+        	else if(d.key=="yAnswer") return "'Y'Answer";
+        	else if(d.key=="ynQuestion") return "'Y/N'Question";
+        	else if(d.key=="m1" || d.key=="m1_harry" || d.key=="m1_ron" || d.key=="m1_hermoine") return "Philosopher's Stone";
+        	else if(d.key=="m2" || d.key=="m2_harry" || d.key=="m2_ron" || d.key=="m2_hermoine") return "Chamber of Secrets";
+        	else if(d.key=="m3" || d.key=="m3_harry" || d.key=="m3_ron" || d.key=="m3_hermoine") return "Prisoner of Azkaban";
+        	else if(d.key=="m4" || d.key=="m4_harry" || d.key=="m4_ron" || d.key=="m4_hermoine") return "Goblet of Fire";
+        	else if(d.key=="m5" || d.key=="m5_harry" || d.key=="m5_ron" || d.key=="m5_hermoine") return "Order of the Phoenix";
+        	else if(d.key=="m6" || d.key=="m6_harry" || d.key=="m6_ron" || d.key=="m6_hermoine") return "Half-Blood Prince";
+        	else if(d.key=="m7" || d.key=="m7_harry" || d.key=="m7_ron" || d.key=="m7_hermoine") return "Deathly Hallows 1";
+        	else if(d.key=="m8" || d.key=="m8_harry" || d.key=="m8_ron" || d.key=="m8_hermoine") return "Deathly Hallows 2";
+        	else if(d.key=="all") return "All Movies";
+            else return d.key;})
+				.style("font", "14px 'Roboto Condensed', 'Helvetica', 'Arial', sans-serif")
+				.style('font-size', '12')
+				.style('font-weight', 'normal')
+        .attr("text-anchor", d => (d.part == "primary" ? "end" : "start"));
+
+    function mouseover(d) {
+        g.selectAll(".mainBars").select(".perc")
+            .text(function(d) {
+                return parseInt((d.percent) * 100);
+            });
+        g.selectAll(".mainBars").select(".val")
+            .text(function(d) {
+                return d3.format("100")(d.value)
+            });
+    }
+}
+
+
+</script>
+
+
+	</body>
+</html>
