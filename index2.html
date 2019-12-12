@@ -1,0 +1,105 @@
+<html>
+	<head>
+		<title>Harry Potter Dialogues</title>
+
+		<!--Scripts-->
+	   	<script src="scripts/d3.v4.js"></script>
+	    <script src="scripts/queue.js"></script>
+	    <link href="css/main.css" rel="stylesheet">
+	</head>
+	<body>
+		<h1 align=center style="margin-bottom: 70px">Harry Potter Series: Who said What?</h1>
+		<table border=0 align="center" width=85% style="margin-bottom: 70px">
+		<tr>
+		<th align=right width=300 style="padding: 30px">
+			<p> Emphasis 
+			<svg width="15" height="15">
+  				<rect width="15" height="15" style="fill:#c33c23;stroke-width:0;stroke:rgb(0,0,0)" />
+			</svg></p>
+			<p> Statement 
+			<svg width="15" height="15">
+  				<rect width="15" height="15" style="fill:#a29574;stroke-width:0;stroke:rgb(0,0,0)" />
+			</svg></p>
+			<p> Question 
+			<svg width="15" height="15">
+  				<rect width="15" height="15" style="fill:#59955c;stroke-width:0;stroke:rgb(0,0,0)" />
+			</svg></p>
+			<p> Answer	
+			<svg width="15" height="15">
+  				<rect width="15" height="15" style="fill:#f69cc4;stroke-width:0;stroke:rgb(0,0,0)" />
+			</svg></p>		
+		</th>
+		<th>
+		<div class="cover" align="center" border=1>
+			<div id="chord_diagram"></div>
+		</div>
+		</th>		
+		<th align="left" style="right-margin:30px" width=400>
+			<p><svg width="15" height="15">
+  				<rect width="15" height="15" style="fill:#7799cc;stroke-width:0;stroke:rgb(0,0,0)" />
+			</svg>
+			Harry Potter</p>
+			<p><svg width="15" height="15">
+  			<rect width="15" height="15" style="fill:#FF6961;stroke-width:0;stroke:rgb(0,0,0)" />
+			</svg>
+			Ron Weasley</p>			
+			<p>
+			<svg width="15" height="15">
+  			<rect width="15" height="15" style="fill:#efa355;stroke-width:0;stroke:rgb(0,0,0)" />
+			</svg>
+			Hermione Granger</p>
+		</th>
+		</tr>
+		</table>
+
+		<div align="center">
+		<div class="slidecontainer" align="center" border=1>
+  			<div><table border=0 style="width: 100% font-size:50%"><tr>
+			<input type="range" min="0" max="8" value="0" class="slider" id="myRange"></tr>
+			<tr>
+  			<th><span class="dot"></span></th>
+			<th><span class="dot"></span></th>
+			<th><span class="dot"></span></th>
+			<th><span class="dot"></span></th>
+			<th><span class="dot"></span></th>
+			<th><span class="dot"></span></th>
+			<th><span class="dot"></span></th>
+			<th><span class="dot"></span></th>
+			<th><span class="dot"></span></th>
+			</tr>
+			<tr>
+  			<td>All Movies</td>
+  			<td>Philosopher's Stone</td>
+  			<td>Chamber of Secrets</td>
+  			<td>Prisoner of Azkaban</td>
+  			<td>Goblet of Fire</td>
+  			<td>Order of the Phoenix</td>
+  			<td>Half-Blood Prince</td>
+  			<td>Deathly Hallows 1</td>
+  			<td>Deathly Hallows 2</td> 
+  			</tr></table></div>
+  		</div>
+  		</div> 
+<!--
+		<div align="center">
+		<div class="slidecontainer" align="center" border=1>
+  			<p>Movie Part:</p>
+  			<input type="range" min="0" max="8" value="0" class="slider" id="myRange">
+  			<div><table border=0 style="width: 80%"><tr>
+  			<th style="left-margin:0px padding:0">All</th>
+  			<th>1</th>
+  			<th>2</th>
+  			<th>3</th>
+  			<th>4</th>
+  			<th>5</th>
+  			<th>6</th>
+  			<th>7</th>
+  			<th>8</th> 
+  			</tr></table></div>
+  		</div>
+  		</div>  -->
+
+		<script src="js/chord2.js">  </script>
+
+	</body>
+</html>
