@@ -44,10 +44,10 @@ function makeRankVis(error, harry, ron, hermoini){
         // create the svg area
     var svg = d3.select("#chord_diagram")
       .append("svg")
-        .attr("width", 650)
-        .attr("height", 650)
+        .attr("width", 700)
+        .attr("height", 700)
       .append("g")
-        .attr("transform", "translate(320,320)")
+        .attr("transform", "translate(320,350)")
 
     slider.oninput = function() {
 
@@ -97,6 +97,16 @@ function makeVis(current_movie){
           matrix[i][j] = matrix[j][i]
       }      
     }
+
+   svg.append("line")
+    .attr("x1", -20)
+    .attr("y1", -320 * 1.8)
+    .attr("x2", 30)
+    .attr("y2", 320 * 2)
+    .style("stroke-dasharray", ("3, 3"))
+    .style("stroke", "#666666")
+    .style("stroke-width", 2)
+    .style("opacity", 1);
     // 4 groups, so create a vector of 4 colors
     //var colors = [ "#FF3399", "#31668dff", "#00994c"]
     var colors = [ "#7799cc", "#FF6961", "#efa355"]
@@ -185,4 +195,6 @@ function makeVis(current_movie){
               .style("opacity", 0.7);
           });
         }
+
+
 }
